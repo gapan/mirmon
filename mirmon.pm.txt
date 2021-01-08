@@ -1,4 +1,4 @@
-Mirmon(3)            User Contributed Perl Documentation            Mirmon(3)
+Mirmon(3)             User Contributed Perl Documentation            Mirmon(3)
 
 
 
@@ -33,8 +33,8 @@ MMiirrmmoonn ccllaassss mmeetthhooddss
        verbosity
            Mirmon always reports errors. Normally it only reports changes
            (inserts/deletes) found in the mirror_list ; in _q_u_i_e_t mode, it
-           doesn’t. In _v_e_r_b_o_s_e mode, it reports progress: the startup and
-           finishing of probes.
+           doesn’t. In _v_e_r_b_o_s_e mode, it reports progress: the startup and fin-
+           ishing of probes.
 
              Mirmon::verbose ( [ $bool ] ) # get/set verbose
              Mirmon::quiet   ( [ $bool ] ) # get/set quiet
@@ -45,9 +45,8 @@ MMiirrmmoonn oobbjjeecctt mmeetthhooddss
            Returns Mirmon’s Mirmon::Conf object.
 
        ssttaattee
-           Returns a hashref "{ url => mirror, ... }", where _u_r_l is as
-           specified in the mirror list and _m_i_r_r_o_r is a Mirmon::Mirror
-           object.
+           Returns a hashref "{ url => mirror, ... }", where _u_r_l is as speci-
+           fied in the mirror list and _m_i_r_r_o_r is a Mirmon::Mirror object.
 
        rreeggiioonnss
            Returns a hashref "{ country_code => country_name, ... }".
@@ -61,8 +60,8 @@ MMiirrmmoonn oobbjjeecctt mmeetthhooddss
 
 MMiirrmmoonn::::CCoonnff oobbjjeecctt mmeetthhooddss
        A Mirmon::Conf object represents a mirmon conguration.  It is normaly
-       created by _M_i_r_m_o_n_:_:_n_e_w_(_).  A specified (or default) config file is
-       read and interpreted.
+       created by _M_i_r_m_o_n_:_:_n_e_w_(_).  A specified (or default) config file is read
+       and interpreted.
 
        attribute methods
            For every config file entry, there is an attribute method :
@@ -75,16 +74,18 @@ MMiirrmmoonn::::CCoonnff oobbjjeecctt mmeetthhooddss
            Returns the file name of (the root of) the configuration file(s).
 
        ssiittee__uurrll
-           Returns a hashref "{ site => url, ... }", as specified in the
-           mirmon config file.
+           Returns a hashref "{ site => url, ... }", as specified in the mir-
+           mon config file.
 
 MMiirrmmoonn::::MMiirrrroorr oobbjjeecctt mmeetthhooddss
        A Mirmon::Mirror object represents the last known state of a mirror.
-       It is normaly created by _M_i_r_m_o_n_:_:_n_e_w_(_) from the state file, as
-       specified in the mirmon config file.  Mirmon::Mirror objects can be
-       used to probe mirrors.
+       It is normaly created by _M_i_r_m_o_n_:_:_n_e_w_(_) from the state file, as speci-
+       fied in the mirmon config file.  Mirmon::Mirror objects can be used to
+       probe mirrors.
 
-   aattttrriibbuuttee mmeetthhooddss
+       aattttrriibbuuttee mmeetthhooddss
+
+
        uurrll The url as given in the mirror list.
 
        aaggee The mirror’s timestamp found by the last successful probe, or
@@ -95,33 +96,35 @@ MMiirrmmoonn::::MMiirrrroorr oobbjjeecctt mmeetthhoodd
            probed.
 
        llaasstt__ookk__pprroobbee
-           The timestamp of the last successful probe or ’undef’ if the
-           mirror was never successfully probed.
+           The timestamp of the last successful probe or ’undef’ if the mirror
+           was never successfully probed.
 
        pprroobbee__hhiissttoorryy
-           The probe history is a list of ’s’ (for success) and ’f’ (for
-           failure) characters indicating the result of the probe. New
-           results are appended whenever the mirror is probed.
+           The probe history is a list of ’s’ (for success) and ’f’ (for fail-
+           ure) characters indicating the result of the probe. New results are
+           appended whenever the mirror is probed.
 
        ssttaattee__hhiissttoorryy
            The state history consists of a timestamp, a ’-’ char, and a list
            of chars indicating a past status: ’s’ (fresh), ’b’ (oldish), ’f’
            (old), ’z’ (bad) or ’x’ (skip).  The timestamp indicates when the
            state history was last updated.  The current status of the mirror
-           is determined by the mirror’s age and a few configuration
-           parameters (min_sync, max_sync, max_poll).  The state history is
-           updated when the mirror is probed.  If the last update of the
-           history was less than 24 hours ago, the last status is replaced by
-           the current status.  If the last update of the history was more
-           than 24 hours ago, the current status is appended to the history.
-           One or more ’skip’s are inserted, if the timestamp is two or more
-           days old (when mirmon hasn’t run for more than two days).
+           is determined by the mirror’s age and a few configuration parame-
+           ters (min_sync, max_sync, max_poll).  The state history is updated
+           when the mirror is probed.  If the last update of the history was
+           less than 24 hours ago, the last status is replaced by the current
+           status.  If the last update of the history was more than 24 hours
+           ago, the current status is appended to the history.  One or more
+           ’skip’s are inserted, if the timestamp is two or more days old
+           (when mirmon hasn’t run for more than two days).
 
        llaasstt__pprroobbee
-           The timestamp of the last probe, or ’undef’ if the mirror was
-           never probed.
+           The timestamp of the last probe, or ’undef’ if the mirror was never
+           probed.
 
-   oobbjjeecctt mmeetthhooddss
+       oobbjjeecctt mmeetthhooddss
+
+
        mmiirrmmoonn
            Returns the parent Mirmon object.
 
@@ -136,10 +139,10 @@ MMiirrmmoonn::::MMiirrrroorr oobbjjeecctt mmeetthhoodd
            the ssiittee is _w_w_w_._s_o_m_e_._o_r_g, and hhoommee is _f_t_p_:_/_/_w_w_w_._s_o_m_e_._o_r_g_/.
 
        aaggee__iinn__ddaayyss
-           Returns the mirror’s age (in fractional days), based on the
-           mirror’s timestamp as found by the last successful probe ; or
-           based on the length of the state history if no probe was ever
-           successful.  Returns ’undef’ if the mirror was never probed.
+           Returns the mirror’s age (in fractional days), based on the mir-
+           ror’s timestamp as found by the last successful probe ; or based on
+           the length of the state history if no probe was ever successful.
+           Returns ’undef’ if the mirror was never probed.
 
        mmaaiill
            Returns the mirror’s contact address as specified in the mirror
@@ -160,12 +163,13 @@ MMiirrmmoonn::::MMiirrrroorr oobbjjeecctt mmeetthhoodd
 SSEEEE AALLSSOO
        mirmon(1)
 
+
 AAUUTTHHOORR
-         (c) 2003-2014 Henk P. Penning
+         (c) 2003-2016 Henk P. Penning
          Faculty of Science, Utrecht University
          http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-         mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
+         mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp
 
 
 
-perl v5.8.5                       2014-08-15                        Mirmon(3)
+perl v5.8.8                       2016-07-23                         Mirmon(3)

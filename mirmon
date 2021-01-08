@@ -1,6 +1,6 @@
 #! /usr/bin/perl -w
 
-# Copyright (c) 2003-2014 Henk Penning, all rights reserved.
+# Copyright (c) 2003-2016 Henk Penning, all rights reserved.
 # penning@uu.nl, http://www.staff.science.uu.nl/~penni101/
 # Version 1.1 was donated to the Apache Software Foundation 2003 Jan 28.
 #
@@ -29,7 +29,7 @@
 use strict ;
 
 our $PRG = 'mirmon' ;
-our $VER = "2.10" ;
+our $VER = "2.11" ;
 
 our $DEF_TIMEOUT = 300 ;
 our $HIST        = 14 ;
@@ -665,16 +665,21 @@ sub age_avg
     for my $age ( @tab ) { $tot += $age ; }
     my $mean = $tot / $cnt ;
 
+# @tab   0  1  2  3  4  5  6  7
+# $#tab -1  0  1  2  3  4  5  6
+# mid    U  0  0  1  1  2  2  3
+# res    U  0 0+1 1 1+2 2 2+3 3
+
     my $median ;
     if ( $cnt == 1 )
       { $median = $tab [ 0 ] ; }
-    elsif ( $cnt % 2 )
+    elsif ( $cnt % 2 ) # cnt is odd ; $#tab is even
+      { my $mid = int ( $#tab / 2 + 0.5 ) ;
+        $median = $tab [ $mid ] ;
+      }
+    else # cnt is even ; $#tab is odd
       { my $mid = int ( $#tab / 2 ) ;
         $median = ( $tab [ $mid ] + $tab [ $mid + 1 ] ) / 2 ;
-      }
-    else
-      { my $mid = int ( $#tab / 2 ) ;
-        $median = $tab [ $mid ] ;
       }
 
     if ( @tab < 2 )
@@ -1839,12 +1844,12 @@ mirmon(1)
 =begin html
 
   <p>
-  &copy; 2003-2014
+  &copy; 2003-2016
   <a href="http://www.staff.science.uu.nl/~penni101/">Henk P. Penning</a>,
   <a href="http://www.uu.nl/faculty/science/EN/">Faculty of Science</a>,
   <a href="http://www.uu.nl/">Utrecht University</a>
   <br />
-  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp ;
+  mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp ;
   <a href="http://validator.w3.org/check?uri=referer">verify html</a>
   </p>
 
@@ -1852,19 +1857,19 @@ mirmon(1)
 
 =begin man
 
-  (c) 2003-2014 Henk P. Penning
+  (c) 2003-2016 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
+  mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp
 
 =end man
 
 =begin text
 
-  (c) 2003-2014 Henk P. Penning
+  (c) 2003-2016 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
+  mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp
 
 =end text
 
@@ -1876,7 +1881,7 @@ use IO::Pipe ;
 use IO::Select ;
 use Net::hostent ;
 
-my $VERSION = Base::Version . ' - Fri Aug 15 12:26:55 2014 - henkp' ;
+my $VERSION = Base::Version . ' - Sat Jul 23 09:12:31 2016 - henkp' ;
 my $DEF_CNF = join ', ', Mirmon -> config_list ;
 my $TIMEOUT = Base::DEF_TIMEOUT ;
 
@@ -2522,12 +2527,12 @@ mirmon.pm(3)
 =begin html
 
   <p>
-  &copy; 2003-2014
+  &copy; 2003-2016
   <a href="http://www.staff.science.uu.nl/~penni101/">Henk P. Penning</a>,
   <a href="http://www.uu.nl/faculty/science/EN/">Faculty of Science</a>,
   <a href="http://www.uu.nl/">Utrecht University</a>
   <br />
-  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp ;
+  mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp ;
   <a href="http://validator.w3.org/check?uri=referer">verify html</a>
   </p>
 
@@ -2535,19 +2540,19 @@ mirmon.pm(3)
 
 =begin man
 
-  (c) 2003-2014 Henk P. Penning
+  (c) 2003-2016 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
+  mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp
 
 =end man
 
 =begin text
 
-  (c) 2003-2014 Henk P. Penning
+  (c) 2003-2016 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
+  mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp
 
 =end text
 

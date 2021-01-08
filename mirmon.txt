@@ -1,4 +1,4 @@
-MIRMON(1)            User Contributed Perl Documentation            MIRMON(1)
+MIRMON(1)             User Contributed Perl Documentation            MIRMON(1)
 
 
 
@@ -6,18 +6,18 @@ NNAAMMEE
        mirmon - monitor the state of mirrors
 
 SSYYNNOOPPSSIISS
-         mirmon [-v] [-q] [-t timeout] [-c conf] [-get all|update|url url]
+         mirmon [-v] [-q] [-t timeout] [-c conf] [-get all│update│url url]
 
 OOPPTTIIOONNSS
-       --vv  Be verbose ; mmiirrmmoonn normally only reports errors and changes in
-           the mirror list.
+       --vv  Be verbose ; mmiirrmmoonn normally only reports errors and changes in the
+           mirror list.
 
        --qq  Be quiet.
 
        --tt _t_i_m_e_o_u_t
            Set the timeout ; the default is _3_0_0.
 
-       --ggeett all | update | url <url>
+       --ggeett all │ update │ url <url>
            With aallll, probe all sites.  With uuppddaattee, probe a selection of the
            sites ; see option "max_poll" below.  With uurrll, probe only the
            given _u_r_l, which must appear in the mirror-list.
@@ -34,18 +34,17 @@ UUSSAAGGEE
 
        It quietly probes a subset of the sites in a given list, writes the
        results in the ’state’ file and generates a web page with the results.
-       The subset contains the sites that are new, bad and/or not probed for
-       a specified time.
+       The subset contains the sites that are new, bad and/or not probed for a
+       specified time.
 
-       When no ’get’ option is specified, the program just generates a new
-       web page from the last known state.
+       When no ’get’ option is specified, the program just generates a new web
+       page from the last known state.
 
-       The program checks the mirrors by running a (user specified) program
-       on a pipe. A (user specified) number of probes is run in parallel
-       using nonblocking IO. When something can be read from the pipe, it
-       switches the pipe to blocking IO and reads one line from the pipe.
-       Then it flushes and closes the pipe. No attempt is made to kill the
-       probe.
+       The program checks the mirrors by running a (user specified) program on
+       a pipe. A (user specified) number of probes is run in parallel using
+       nonblocking IO. When something can be read from the pipe, it switches
+       the pipe to blocking IO and reads one line from the pipe. Then it
+       flushes and closes the pipe. No attempt is made to kill the probe.
 
        The probe should return something that looks like
 
@@ -55,51 +54,53 @@ UUSSAAGGEE
        the probe is ignored.
 
 CCOONNFFIIGG FFIILLEE
-   llooccaattiioonn
+       llooccaattiioonn
+
        A config file can be specified with the -c option.  If -c is not used,
        the program looks for a config file in
 
-       ·   ..//mmiirrmmoonn..ccoonnff
+       * ..//mmiirrmmoonn..ccoonnff
+       * $$HHOOMMEE//..mmiirrmmoonn..ccoonnff
+       * //eettcc//mmiirrmmoonn..ccoonnff
 
-       ·   $$HHOOMMEE//..mmiirrmmoonn..ccoonnff
+       ssyynnttaaxx
 
-       ·   //eettcc//mmiirrmmoonn..ccoonnff
-
-   ssyynnttaaxx
        A config file looks like this :
 
          +--------------------------------------------------
-         |# lines that start with '#' are comment
-         |# blank lines are ignored too
-         |# tabs are replaced by a space
-         |
-         |# the config entries are 'key' and 'value' pairs
-         |# a 'key' begins in column 1
-         |# the 'value' is the rest of the line
-         |somekey  A_val B_val ...
-         |otherkey X_val Y_val ...
-         |
-         |# indented lines are glued
-         |# the next three lines mean 'somekey part1 part2 part3'
-         |somekey part1
-         |  part2
-         |  part3
-         |
-         |# lines starting with a '+' are concatenated
-         |# the next three lines mean 'somekey part1part2part3'
-         |somekey part1
-         |+ part2
-         |+ part3
-         |
-         |# lines starting with a '.' are glued too
-         |# don't use a '.' on a line by itself
-         |# 'somekey' gets the value "part1\n part2\n part3"
-         |somekey part1
-         |. part2
-         |. part3
+         │# lines that start with ’#’ are comment
+         │# blank lines are ignored too
+         │# tabs are replaced by a space
+         │
+         │# the config entries are ’key’ and ’value’ pairs
+         │# a ’key’ begins in column 1
+         │# the ’value’ is the rest of the line
+         │somekey  A_val B_val ...
+         │otherkey X_val Y_val ...
+         │
+         │# indented lines are glued
+         │# the next three lines mean ’somekey part1 part2 part3’
+         │somekey part1
+         │  part2
+         │  part3
+         │
+         │# lines starting with a ’+’ are concatenated
+         │# the next three lines mean ’somekey part1part2part3’
+         │somekey part1
+         │+ part2
+         │+ part3
+         │
+         │# lines starting with a ’.’ are glued too
+         │# don’t use a ’.’ on a line by itself
+         │# ’somekey’ gets the value "part1\n part2\n part3"
+         │somekey part1
+         │. part2
+         │. part3
          +--------------------------------------------------
 
-   rreeqquuiirreedd eennttrriieess
+       rreeqquuiirreedd eennttrriieess
+
+
        project_name _n_a_m_e
            Specify a short plaintext name for the project.
 
@@ -118,18 +119,16 @@ CCOONNFFIIGG FFIILLEE
 
            If your mirror list is generated by a program, use
 
-             mirror_list /path/to/program arg1 ... |
+             mirror_list /path/to/program arg1 ... │
 
            Two formats are supported :
 
-           ·   plain : lines like
-
+           * plain : lines like
                  us http://www.tux.org/ [email] ...
                  nl http://apache.cs.uu.nl/dist/ [email] ...
                  nl rsync://archive.cs.uu.nl/apache-dist/ [email] ...
 
-           ·   apache : lines like those in the apache mirrors.list
-
+           * apache : lines like those in the apache mirrors.list
                  ftp  us ftp://ftp.tux.org/pub/net/apache/dist/ user@tux.org ...
                  http nl http://apache.cs.uu.nl/dist/ user@cs.uu.nl ...
 
@@ -143,11 +142,11 @@ CCOONNFFIIGG FFIILLEE
            Specify where the html report page is written.
 
        icons _d_i_r_e_c_t_o_r_y_-_n_a_m_e
-           Specify the directory where the icons can be found, relative to
-           the _w_e_b___p_a_g_e, or relative to the DOCUMENTROOT of the web server.
+           Specify the directory where the icons can be found, relative to the
+           _w_e_b___p_a_g_e, or relative to the DOCUMENTROOT of the web server.
 
-           If/when the _w_e_b___p_a_g_e lives in directory ".../mirmon/" and the
-           icons live in directory ".../mirmon/icons/", specify
+           If/when the _w_e_b___p_a_g_e lives in directory ".../mirmon/" and the icons
+           live in directory ".../mirmon/icons/", specify
 
              icons icons
 
@@ -164,11 +163,11 @@ CCOONNFFIIGG FFIILLEE
            Before the program is started, %TIMEOUT% and %URL% are substituted
            with the proper timeout and url values.
 
-           Here it is assumed that each hour the root server writes a
-           timestamp in /path/to/archive/TIME.txt, for instance with a
-           crontab entry like
+           Here it is assumed that each hour the root server writes a times-
+           tamp in /path/to/archive/TIME.txt, for instance with a crontab
+           entry like
 
-             42 * * * * perl -e 'print time, "\n"' > /path/to/archive/TIME.txt
+             42 * * * * perl -e ’print time, "\n"’ > /path/to/archive/TIME.txt
 
            Mirmon reads one line of output from the probe and interprets the
            first word on that line as a timestamp ; for example :
@@ -177,8 +176,8 @@ CCOONNFFIIGG FFIILLEE
              1043625600 Mon Jan 27 00:00:00 2003
              1043625600 www.apache.org Mon Jan 27 00:00:00 2003
 
-           Mirmon is distributed with a program "probe" that handles ftp,
-           http and rsync urls.
+           Mirmon is distributed with a program "probe" that handles ftp, http
+           and rsync urls.
 
        state _f_i_l_e_-_n_a_m_e
            Specify where the file containing the state is written.
@@ -187,8 +186,8 @@ CCOONNFFIIGG FFIILLEE
            mirrors are probed (-get is specified).
 
        countries _f_i_l_e_-_n_a_m_e
-           Specify the file containing the country codes; The file should
-           contain lines like
+           Specify the file containing the country codes; The file should con-
+           tain lines like
 
              us - United States
              nl - Netherlands
@@ -199,7 +198,9 @@ CCOONNFFIIGG FFIILLEE
            in the report ; lowercase-first fake domains (like _b_a_c_k_u_p) are
            listed last.
 
-   ooppttiioonnaall eennttrriieess
+       ooppttiioonnaall eennttrriieess
+
+
        max_probes _n_u_m_b_e_r
            Optionally specify the number of parallel probes (default 25).
 
@@ -223,8 +224,7 @@ CCOONNFFIIGG FFIILLEE
                <link REL=StyleSheet HREF="/style.css" TYPE="text/css">
 
        htm_top _h_t_m_l
-           Optionally specify some HTML to be placed near the top of the
-           page.
+           Optionally specify some HTML to be placed near the top of the page.
 
              htm_top testing 1, 2, 3
 
@@ -236,29 +236,26 @@ CCOONNFFIIGG FFIILLEE
                <A HREF="..."><IMG SRC="..." BORDER=0></A>
                <HR>
 
-       put_histo top|bottom|nowhere
+       put_histo top│bottom│nowhere
            Optionally specify where the age histogram must be placed.  The
            default is ’top’.
 
        min_poll _t_i_m_e_-_s_p_e_c
-           For ’min_poll’ see next item. A _t_i_m_e_-_s_p_e_c is a number followed by
-           a unit ’s’ (seconds), or ’m’ (minutes), or ’h’ (hours), or ’d’
+           For ’min_poll’ see next item. A _t_i_m_e_-_s_p_e_c is a number followed by a
+           unit ’s’ (seconds), or ’m’ (minutes), or ’h’ (hours), or ’d’
            (days).  For example ’3d’ (three days) or ’36h’ (36 hours).
 
        max_poll _t_i_m_e_-_s_p_e_c
            Optionally specify the maximum probe interval. When the program is
            called with option ’-get update’, all sites are probed which are :
 
-           ·   new
-
+           * new
                the site appears in the list, but there is no known state
 
-           ·   bad
-
+           * bad
                the last probe of the site was unsuccessful
 
-           ·   old
-
+           * old
                the last probe was more than ’max_poll’ ago.
 
            Sites are not probed if the last probe was less than ’min_poll’
@@ -270,8 +267,8 @@ CCOONNFFIIGG FFIILLEE
            the ’reachable’ sites are probed twice daily and the ’unreachable’
            sites are probed at most six times a day.
 
-           The default ’min_poll’ is ’1h’ (1 hour).  The default ’max_poll’
-           is ’4h’ (4 hours).
+           The default ’min_poll’ is ’1h’ (1 hour).  The default ’max_poll’ is
+           ’4h’ (4 hours).
 
        min_sync _t_i_m_e_-_s_p_e_c
            Optionally specify how often the mirrors are required to make an
@@ -293,26 +290,26 @@ CCOONNFFIIGG FFIILLEE
            This is intended for _f_a_k_e _r_e_g_i_o_n_s like _M_a_s_t_e_r etc.
 
        no_randomize
-           Mirmon tries to balance the probe load over the hourly mirmon
-           runs.  If the current run has a below average number of mirrors to
-           probe, mirmon probes a few extra, randomly chosen mirrors, picked
-           from the runs that have the highest load.
+           Mirmon tries to balance the probe load over the hourly mirmon runs.
+           If the current run has a below average number of mirrors to probe,
+           mirmon probes a few extra, randomly chosen mirrors, picked from the
+           runs that have the highest load.
 
            If you don’t want this behaviour, use nnoo__rraannddoommiizzee.
 
        no_add_slash
-           If the url part of a line in the mirror_list doesn’t end in a
-           slash (’/’), mirmon adds a slash and issues a warning unless it is
-           in quiet mode.
+           If the url part of a line in the mirror_list doesn’t end in a slash
+           (’/’), mirmon adds a slash and issues a warning unless it is in
+           quiet mode.
 
            If you don’t want this behaviour, use nnoo__aadddd__ssllaasshh.
 
-       list_style plain|apache
-           Optionally specify the format (’plain’ or ’apache’) of the mirror-
-           list.
+       list_style plain│apache
+           Optionally specify the format (’plain’ or ’apache’) of the mir-
+           ror-list.
 
-           See the description of ’mirror_list’ above.  The default
-           list_style is ’plain’.
+           See the description of ’mirror_list’ above.  The default list_style
+           is ’plain’.
 
        site_url _s_i_t_e _u_r_l
            Optionally specify a substitute url for a site.
@@ -327,11 +324,11 @@ CCOONNFFIIGG FFIILLEE
        include _f_i_l_e_-_n_a_m_e
            Optionally specify a file to include.
 
-           The specified file is processed ’in situ’. After the specified
-           file is read and processed, config processing is resumed in the
-           file where the "include" was encountered.  The include depth is
-           unlimited. However, it is a fatal error to include a file twice
-           under the same name.
+           The specified file is processed ’in situ’. After the specified file
+           is read and processed, config processing is resumed in the file
+           where the "include" was encountered.  The include depth is unlim-
+           ited. However, it is a fatal error to include a file twice under
+           the same name.
 
        show
            When the config processor encounters the ’show’ command, it dumps
@@ -339,83 +336,74 @@ CCOONNFFIIGG FFIILLEE
            specified. This is intented for debugging.
 
        exit
-           When the config processor encounters the ’exit’ command, it
-           terminates the program. This is intented for debugging.
+           When the config processor encounters the ’exit’ command, it termi-
+           nates the program. This is intented for debugging.
 
 SSTTAATTEE FFIILLEE FFOORRMMAATT
-       The state file consists of lines; one line per site.  Each line
-       consists of white space separated fields.  The seven fields are :
+       The state file consists of lines; one line per site.  Each line con-
+       sists of white space separated fields.  The seven fields are :
 
-       ·   field 1 : url
-
+       * field 1 : url
            The url as given in the mirror list.
 
-       ·   field 2 : age
-
+       * field 2 : age
            The mirror’s timestamp found by the last successful probe, or
            ’undef’ if no probe was ever successful.
 
-       ·   field 3 : status last probe
-
+       * field 3 : status last probe
            The status of the last probe, or ’undef’ if the mirror was never
            probed.
 
-       ·   field 4 : time last successful probe
+       * field 4 : time last successful probe
+           The timestamp of the last successful probe or ’undef’ if the mirror
+           was never successfully probed.
 
-           The timestamp of the last successful probe or ’undef’ if the
-           mirror was never successfully probed.
+       * field 5 : probe history
+           The probe history is a list of ’s’ (for success) and ’f’ (for fail-
+           ure) characters indicating the result of the probe. New results are
+           appended whenever the mirror is probed.
 
-       ·   field 5 : probe history
-
-           The probe history is a list of ’s’ (for success) and ’f’ (for
-           failure) characters indicating the result of the probe. New
-           results are appended whenever the mirror is probed.
-
-       ·   field 6 : state history
-
+       * field 6 : state history
            The state history consists of a timestamp, a ’-’ char, and a list
            of chars indicating a past status: ’s’ (fresh), ’b’ (oldish), ’f’
            (old), ’z’ (bad) or ’x’ (skip).  The timestamp indicates when the
            state history was last updated.  The current status of the mirror
-           is determined by the mirror’s age and a few configuration
-           parameters (min_sync, max_sync, max_poll).  The state history is
-           updated when the mirror is probed.  If the last update of the
-           history was less than 24 hours ago, the last status is replaced by
-           the current status.  If the last update of the history was more
-           than 24 hours ago, the current status is appended to the history.
-           One or more ’skip’s is inserted, if the timestamp is two or more
-           days old (when mirmon hasn’t run for more than two days).
+           is determined by the mirror’s age and a few configuration parame-
+           ters (min_sync, max_sync, max_poll).  The state history is updated
+           when the mirror is probed.  If the last update of the history was
+           less than 24 hours ago, the last status is replaced by the current
+           status.  If the last update of the history was more than 24 hours
+           ago, the current status is appended to the history.  One or more
+           ’skip’s is inserted, if the timestamp is two or more days old (when
+           mirmon hasn’t run for more than two days).
 
-       ·   field 7 : last probe
-
-           The timestamp of the last probe, or ’undef’ if the mirror was
-           never probed.
+       * field 7 : last probe
+           The timestamp of the last probe, or ’undef’ if the mirror was never
+           probed.
 
 IINNSSTTAALLLLAATTIIOONN
-   ggeenneerraall
-       ·   Note: The (empty) state file must exist before mirmon runs.
+       ggeenneerraall
 
-       ·   The mirmon repository is here :
 
+       * Note: The (empty) state file must exist before mirmon runs.
+       * The mirmon repository is here :
              https://svn.science.uu.nl/repos/project.mirmon/trunk/
 
-       ·   The mirmon tarball is here :
-
+       * The mirmon tarball is here :
              http://www.staff.science.uu.nl/~penni101/mirmon/mirmon.tar.gz
 
-   iinnssttaallllaattiioonn ssuuggggeessttiioonnss
+       iinnssttaallllaattiioonn ssuuggggeessttiioonnss
+
        To install and configure mirmon, take the following steps :
 
-       · First, make the webdir :
-
+       * First, make the webdir :
            cd DOCUMENTROOT
            mkdir mirmon
 
          For _D_O_C_U_M_E_N_T_R_O_O_T, substitute the full pathname of the document root
          of your webserver.
 
-       · Check out the mirmon repository :
-
+       * Check out the mirmon repository :
            cd /usr/local/src
            svn checkout REPO mirmon
 
@@ -425,21 +413,17 @@ IINNSSTTAALLLLAATTIIOONN
 
          or download the package and unpack it.
 
-       · Chdir to directory mirmon :
-
+       * Chdir to directory mirmon :
            cd mirmon
 
-       · Create the (empty) state file :
-
+       * Create the (empty) state file :
            touch state.txt
 
-       · Install the icons in the webdir :
-
+       * Install the icons in the webdir :
            mkdir DOCUMENTROOT/mirmon/icons
            cp icons/* DOCUMENTROOT/mirmon/icons
 
-       · Create a mirror list "mirror_list" ;
-
+       * Create a mirror list "mirror_list" ;
          Use your favorite editor, or genererate the list from an existing
          database.
 
@@ -449,8 +433,7 @@ IINNSSTTAALLLLAATTIIOONN
 
          The email addresses are optional.
 
-       · Create a mirmon config file "mirmon.conf" with your favorite editor.
-
+       * Create a mirmon config file "mirmon.conf" with your favorite editor.
            # lines must start in the first column ; no leading white space
            project_name ....
            project_url  ....
@@ -463,20 +446,17 @@ IINNSSTTAALLLLAATTIIOONN
 
          This assumes the project’s timestamp is in file "TIME.txt".
 
-       · If you have rsync urls, change the probe line to :
-
+       * If you have rsync urls, change the probe line to :
            probe perl /usr/local/src/mirmon/probe -t %TIMEOUT% %URL%TIME.txt
 
-       · Run mirmon :
-
+       * Run mirmon :
            perl mirmon -v -get all
 
          The mirmon report should now be in ’DOCUMENTROOT/mirmon/index.html’
 
            http://www.your.project.org/mirmon/
 
-       · If/when, at a later date, you want to upgrade mirmon :
-
+       * If/when, at a later date, you want to upgrade mirmon :
            cd /usr/local/src/mirmon
            svn status -u
            svn up
@@ -484,12 +464,13 @@ IINNSSTTAALLLLAATTIIOONN
 SSEEEE AALLSSOO
        mirmon.pm(3)
 
+
 AAUUTTHHOORR
-         (c) 2003-2014 Henk P. Penning
+         (c) 2003-2016 Henk P. Penning
          Faculty of Science, Utrecht University
          http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-         mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
+         mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp
 
 
 
-perl v5.8.5                       2014-08-15                        MIRMON(1)
+perl v5.8.8                       2016-07-23                         MIRMON(1)

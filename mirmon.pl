@@ -12,7 +12,7 @@ use IO::Pipe ;
 use IO::Select ;
 use Net::hostent ;
 
-my $VERSION = Base::Version . ' - Fri Aug 15 12:26:55 2014 - henkp' ;
+my $VERSION = Base::Version . ' - Sat Jul 23 09:12:31 2016 - henkp' ;
 my $DEF_CNF = join ', ', Mirmon -> config_list ;
 my $TIMEOUT = Base::DEF_TIMEOUT ;
 
@@ -658,12 +658,12 @@ mirmon.pm(3)
 =begin html
 
   <p>
-  &copy; 2003-2014
+  &copy; 2003-2016
   <a href="http://www.staff.science.uu.nl/~penni101/">Henk P. Penning</a>,
   <a href="http://www.uu.nl/faculty/science/EN/">Faculty of Science</a>,
   <a href="http://www.uu.nl/">Utrecht University</a>
   <br />
-  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp ;
+  mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp ;
   <a href="http://validator.w3.org/check?uri=referer">verify html</a>
   </p>
 
@@ -671,19 +671,19 @@ mirmon.pm(3)
 
 =begin man
 
-  (c) 2003-2014 Henk P. Penning
+  (c) 2003-2016 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
+  mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp
 
 =end man
 
 =begin text
 
-  (c) 2003-2014 Henk P. Penning
+  (c) 2003-2016 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
+  mirmon-2.11 - Sat Jul 23 09:12:31 2016 ; henkp
 
 =end text
 

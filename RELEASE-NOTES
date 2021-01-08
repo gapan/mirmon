@@ -7,6 +7,11 @@ Upgrading :
    http://www.staff.science.uu.nl/~penni101/mirmon/svn/trunk/countries.list
 
 ----------------------------------------------------------------------
+mirmon 2.11 -- 22 juli 2016
+
+o Brent Thompson spotted a bug in the computation for 'median' ; fixed.
+
+----------------------------------------------------------------------
 mirmon 2.10 -- 15 augustus 2014
 
 o Probe only one site-url with "mirmon -get url site-url".
