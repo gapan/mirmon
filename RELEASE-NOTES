@@ -1,0 +1,106 @@
+Upgrading : 
+
+-- All versions of mirmon use the same state file format, config file format
+   and icon set. You can upgrade safely by just replacing program 'mirmon'.
+
+-- It is advisable to update the countries.list :
+   http://www.staff.science.uu.nl/~penni101/mirmon/svn/trunk/countries.list
+
+----------------------------------------------------------------------
+mirmon 2.9 -- 13 augustus 2013
+
+o Added a LICENSE file, requested by fedora packagers.
+
+----------------------------------------------------------------------
+mirmon 2.8 -- 13 februari 2013
+
+o Fixed the cronjob examples in the doc ; because in crontab(5) entries
+  a '%' has to be escaped as "\%".
+
+o Fixed the doc ; html pages are now "XHTML 1.0 Strict" compliant.
+
+----------------------------------------------------------------------
+mirmon 2.7 -- Sat Dec 15 09:56:53 CET 2012
+
+o Added option "always_get region ..." for Master, Tier1 etc.
+
+o Changed location of author, svn repository.
+
+--- mirmon 2.6 -- 26 may 2012 ----------------------------------------
+
+o Fixed sorting of 'fake' domain ; ucfirst not is required.
+
+--- mirmon 2.5 -- 24 march 2012 --------------------------------------
+
+o Capitalize region names ; fake domains (like 'Master') should be ucfirst,
+  and go to the top of the report list ; 'proper' regions are sorted 'lc'.
+  The ISO-country-list is now utf8, Capitalized and complete.
+
+o Faster probe-load averaging by always probing the average number
+  of mirrors. The 'ok' and 'not ok' mirrors are averaged separately.
+
+o Show 'project_name' when reporting changes in the mirror-list.
+
+o Show 'path' for rsync urls in the report like 'site::path'.
+
+--- mirmon 2.4 -- 17 january 2011 ------------------------------------
+
+o Fixed a bug (time/res).
+
+--- mirmon 2.3 -- 17 march 2010 --------------------------------------
+
+o Fixed a bug in the countries-list ; added the required '-'.
+
+--- mirmon 2.2 -- 9 march 2010 ---------------------------------------
+
+o Fixed a bug in handling of required/optional config keys.
+
+--- mirmon 2.1 -- 28 jan 2010 ----------------------------------------
+
+o The algorithm to balance the probe load over the hourly mirmon runs
+  is improved ; from completely skewed to balanced takes some 5 days.
+
+o Mirmon only reports changes in the mirror_list (inserts and deletes)
+  unless in quiet mode ; option -v now shows progress when probing.
+
+o Added some documentation ; fixed some doc bugs.
+
+--- mirmon 2.0 -- 9 jan 2010 ----------------------------------------
+
+o The code was completely reorganized ; hence the bump in the
+  major version number.
+
+o The code is now modularised. The distribution contains 'Mirmon.pm',
+  an OO interface for mirmon objects. Program 'mirmon' still contains
+  all the code ; it is split into 'Mirmon.pm' and 'mirmon.pl'.
+
+o For Mirmon.pm, html and man (source and formatted) pages were added.
+
+o Configuration option 'htm_top' : the supplied text is no longer placed
+  between <P> and </P> in the report ; to keep the www validator happy.
+
+o The report is smaller ; html code for the age histogram is improved.
+
+o Formatted man pages (mirmon.txt and mirmon.pm.txt) are now created
+  with pod2man and man instead of pod2text.
+
+o Program probe passes options -v and -q to rsync and wget.
+
+o documentation : better guidelines in the 'installation' section.
+
+--- mirmon 1.39 -- 24 dec 2009 --------------------------------------
+
+o The mirror list can now have rsync urls like
+    rsync://rsync.apache.org/apache-dist/
+
+o The mirmon distro now contains a sample program 'probe' ;
+  a simple Perl program for probing ftp, http and rsync mirrors.
+
+o A new directive 'no-add-slash' prevents mirmon from
+  adding a trailing slash to urls, when one is missing.
+
+o The distro now contains a mirmon.1 man page source.
+
+o Internal note : source management changed from rcs to svn.
+
+---------------------------------------------------------------------

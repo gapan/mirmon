@@ -1,0 +1,640 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!--
+
+This file is generated from pod source by user 'csg'.
+
+Generator : trunk/admin/doc/pod2htm
+Source    : trunk/admin/doc/../mirmon.pl
+Date/time : Tue Aug 13 06:50:43 2013 [UTC]
+
+-->
+<head>
+<title>mirmon - monitor the state of mirrors</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#usage">USAGE</a></li>
+	<li><a href="#config_file">CONFIG FILE</a>
+	<ul>
+		<li><a href="#location">location</a></li>
+		<li><a href="#syntax">syntax</a></li>
+		<li><a href="#required_entries">required entries</a></li>
+		<li><a href="#optional_entries">optional entries</a></li>
+	</ul></li>
+	<li><a href="#state_file_format">STATE FILE FORMAT</a></li>
+	<li><a href="#installation">INSTALLATION</a>
+	<ul>
+		<li><a href="#general">general</a></li>
+		<li><a href="#installation_suggestions">installation suggestions</a></li>
+	</ul></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a>
+</li></ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>mirmon - monitor the state of mirrors</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  mirmon [ -v ] [ -q ] [ -t timeout ] [ -get opt ] [ -c conf ]</pre>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2dv"><strong>-v</strong></a></strong></dt>
+
+<dd>
+<p>Be verbose ; <strong>mirmon</strong> normally only reports
+errors and changes in the mirror list.</p>
+</dd>
+<dt><strong><a name="item__2dq"><strong>-q</strong></a></strong></dt>
+
+<dd>
+<p>Be quiet.</p>
+</dd>
+<dt><strong><a name="item__2dt_timeout"><strong>-t</strong> <em>timeout</em></a></strong></dt>
+
+<dd>
+<p>Set the timeout ; the default is <em>300</em>.</p>
+</dd>
+<dt><strong><a name="item__2dget_all__7c_update"><strong>-get</strong> <em>all</em> | <em>update</em></a></strong></dt>
+
+<dd>
+<p>With <em>all</em>, probe all sites ;
+with <em>update</em>, probe a selection of the sites ;
+see option <code>max_poll</code> below.</p>
+</dd>
+<dt><strong><a name="item__2dc_name"><strong>-c</strong> <em>name</em></a></strong></dt>
+
+<dd>
+<p>Use config file <em>name</em>. The default list is</p>
+<pre>
+  ./mirmon.conf $HOME/.mirmon.conf /etc/mirmon.conf</pre>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="usage">USAGE</a></h1>
+<p>The program is intended to be run by cron every hour.</p>
+<pre>
+  42 * * * * perl /path/to/mirmon -get update</pre>
+<p>It quietly probes a subset of the sites in a given list,
+writes the results in the 'state' file and generates a web page
+with the results. The subset contains the sites that are new, bad
+and/or not probed for a specified time.</p>
+<p>When no 'get' option is specified, the program just generates a
+new web page from the last known state.</p>
+<p>The program checks the mirrors by running a (user specified)
+program on a pipe. A (user specified) number of probes is
+run in parallel using nonblocking IO. When something can be
+read from the pipe, it switches the pipe to blocking IO and
+reads one line from the pipe. Then it flushes and closes the
+pipe. No attempt is made to kill the probe.</p>
+<p>The probe should return something that looks like</p>
+<pre>
+  1043625600 ...</pre>
+<p>that is, a line of text starting with a timestamp. The exit status
+of the probe is ignored.</p>
+<p>
+</p>
+<hr />
+<h1><a name="config_file">CONFIG FILE</a></h1>
+<p>
+</p>
+<h2><a name="location">location</a></h2>
+<p>A config file can be specified with the -c option.
+If -c is not used, the program looks for a config file in</p>
+<ul>
+<li><strong><a name="item__2e_2fmirmon_2econf"><strong>./mirmon.conf</strong></a></strong>
+
+</li>
+<li><strong><a name="item__home__mirmon_conf"><strong>$HOME/.mirmon.conf</strong></a></strong>
+
+</li>
+<li><strong><a name="item__2fetc_2fmirmon_2econf"><strong>/etc/mirmon.conf</strong></a></strong>
+
+</li>
+</ul>
+<p>
+</p>
+<h2><a name="syntax">syntax</a></h2>
+<p>A config file looks like this :</p>
+<pre>
+  +--------------------------------------------------
+  |# lines that start with '#' are comment
+  |# blank lines are ignored too
+  |# tabs are replaced by a space
+  |
+  |# the config entries are 'key' and 'value' pairs
+  |# a 'key' begins in column 1
+  |# the 'value' is the rest of the line
+  |somekey  A_val B_val ...
+  |otherkey X_val Y_val ...
+  |
+  |# indented lines are glued
+  |# the next three lines mean 'somekey part1 part2 part3'
+  |somekey part1
+  |  part2
+  |  part3
+  |
+  |# lines starting with a '+' are concatenated
+  |# the next three lines mean 'somekey part1part2part3'
+  |somekey part1
+  |+ part2
+  |+ part3
+  |
+  |# lines starting with a '.' are glued too
+  |# don't use a '.' on a line by itself
+  |# 'somekey' gets the value &quot;part1\n part2\n part3&quot;
+  |somekey part1
+  |. part2
+  |. part3
+  +--------------------------------------------------</pre>
+<p>
+</p>
+<h2><a name="required_entries">required entries</a></h2>
+<dl>
+<dt><strong><a name="item_project_name_name">project_name <em>name</em></a></strong></dt>
+
+<dd>
+<p>Specify a short plaintext name for the project.</p>
+<pre>
+  project_name Apache
+  project_name CTAN</pre>
+</dd>
+<dt><strong><a name="item_project_url_url">project_url <em>url</em></a></strong></dt>
+
+<dd>
+<p>Specify an url pointing to the 'home' of the project.</p>
+<pre>
+  project_url <a href="http://www.apache.org/">http://www.apache.org/</a></pre>
+</dd>
+<dt><strong><a name="item_mirror_list_file_2dname">mirror_list <em>file-name</em></a></strong></dt>
+
+<dd>
+<p>Specify the file containing the mirrors to probe.</p>
+<pre>
+  mirror_list /path/to/mirror-list</pre>
+<p>If your mirror list is generated by a program, use</p>
+<pre>
+  mirror_list /path/to/program arg1 ... |</pre>
+<p>Two formats are supported :</p>
+<ul>
+<li><strong><a name="item_plain__3a_lines_like">plain : lines like</a></strong>
+
+<pre>
+  us <a href="http://www.tux.org/">http://www.tux.org/</a> [email] ...
+  nl <a href="http://apache.cs.uu.nl/dist/">http://apache.cs.uu.nl/dist/</a> [email] ...
+  nl rsync://archive.cs.uu.nl/apache-dist/ [email] ...</pre>
+</li>
+<li><strong><a name="item_apache__3a_lines_like_those_in_the_apache_mirrors_">apache : lines like those in the apache mirrors.list</a></strong>
+
+<pre>
+  ftp  us <a href="ftp://ftp.tux.org/pub/net/apache/dist/">ftp://ftp.tux.org/pub/net/apache/dist/</a> user@tux.org ...
+  http nl <a href="http://apache.cs.uu.nl/dist/">http://apache.cs.uu.nl/dist/</a> user@cs.uu.nl ...</pre>
+</li>
+</ul>
+<p>Note that in style 'plain' the third item is reserved for an
+optional email address : the site's contact address.</p>
+<p>Specify the required format with option <code>list_style</code> (see below).
+The default style is 'plain'.</p>
+</dd>
+<dt><strong><a name="item_web_page_file_2dname">web_page <em>file-name</em></a></strong></dt>
+
+<dd>
+<p>Specify where the html report page is written.</p>
+</dd>
+<dt><strong><a name="item_icons_directory_2dname">icons <em>directory-name</em></a></strong></dt>
+
+<dd>
+<p>Specify the directory where the icons can be found,
+relative to the <em>web_page</em>, or relative to the
+DOCUMENTROOT of the web server.</p>
+<p>If/when the <em>web_page</em> lives in directory <code>.../mirmon/</code> and
+the icons live in directory <code>.../mirmon/icons/</code>,
+specify</p>
+<pre>
+  icons icons</pre>
+<p>If/when the icons live in <code>/path/to/DOCUMENTROOT/icons/mirmon/</code>, specify</p>
+<pre>
+  icons /icons/mirmon</pre>
+</dd>
+<dt><strong><a name="item_probe_program__2b_arguments">probe <em>program + arguments</em></a></strong></dt>
+
+<dd>
+<p>Specify the program+args to probe the mirrors. Example:</p>
+<pre>
+  probe /usr/bin/wget -q -O - -T %TIMEOUT% -t 1 %URL%TIME.txt</pre>
+<p>Before the program is started, %TIMEOUT% and %URL% are
+substituted with the proper timeout and url values.</p>
+<p>Here it is assumed that each hour the root server writes
+a timestamp in /path/to/archive/TIME.txt, for instance with
+a crontab entry like</p>
+<pre>
+  42 * * * * perl -e 'print time, &quot;\n&quot;' &gt; /path/to/archive/TIME.txt</pre>
+<p>Mirmon reads one line of output from the probe and interprets
+the first word on that line as a timestamp ; for example :</p>
+<pre>
+  1043625600
+  1043625600 Mon Jan 27 00:00:00 2003
+  1043625600 www.apache.org Mon Jan 27 00:00:00 2003</pre>
+<p>Mirmon is distributed with a program <code>probe</code> that handles
+ftp, http and rsync urls.</p>
+</dd>
+<dt><strong><a name="item_state_file_2dname">state <em>file-name</em></a></strong></dt>
+
+<dd>
+<p>Specify where the file containing the state is written.</p>
+<p>The program reads this file on startup and writes the
+file when mirrors are probed (-get is specified).</p>
+</dd>
+<dt><strong><a name="item_countries_file_2dname">countries <em>file-name</em></a></strong></dt>
+
+<dd>
+<p>Specify the file containing the country codes;
+The file should contain lines like</p>
+<pre>
+  us - United States
+  nl - Netherlands</pre>
+<p>The mirmon package contains a recent ISO list.</p>
+<p><em>Fake</em> domains like <em>Backup</em>, <em>Master</em> are allowed,
+and are listed first in the report ; lowercase-first
+fake domains (like <em>backup</em>) are listed last.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="optional_entries">optional entries</a></h2>
+<dl>
+<dt><strong><a name="item_max_probes_number">max_probes <em>number</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify the number of parallel probes (default 25).</p>
+</dd>
+<dt><strong><a name="item_timeout_seconds">timeout <em>seconds</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify the timeout for the probes (default 300).</p>
+<p>After the last probe is started, the program waits for
+&lt;timeout&gt; + 10 seconds, cleans up and exits.</p>
+</dd>
+<dt><strong><a name="item_project_logo_logo">project_logo <em>logo</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify (the SRC of the IMG of) a logo to be placed
+top right on the page.</p>
+<pre>
+  project_logo /icons/apache.gif
+  project_logo <a href="http://www.apache.org/icons/">http://www.apache.org/icons/</a>...</pre>
+</dd>
+<dt><strong><a name="item_htm_head_html">htm_head <em>html</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify some HTML to be placed before &lt;/HEAD&gt;.</p>
+<pre>
+  htm_head
+    &lt;link REL=StyleSheet HREF=&quot;/style.css&quot; TYPE=&quot;text/css&quot;&gt;</pre>
+</dd>
+<dt><strong><a name="item_htm_top_html">htm_top <em>html</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify some HTML to be placed near the top of the page.</p>
+<pre>
+  htm_top testing 1, 2, 3</pre>
+</dd>
+<dt><strong><a name="item_htm_foot_html">htm_foot <em>html</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify HTML to be placed near the bottom of the page.</p>
+<pre>
+  htm_foot
+    &lt;HR&gt;
+    &lt;A HREF=&quot;...&quot;&gt;&lt;IMG SRC=&quot;...&quot; BORDER=0&gt;&lt;/A&gt;
+    &lt;HR&gt;</pre>
+</dd>
+<dt><strong><a name="item_put_histo_top_7cbottom_7cnowhere">put_histo top|bottom|nowhere</a></strong></dt>
+
+<dd>
+<p>Optionally specify where the age histogram must be placed.
+The default is 'top'.</p>
+</dd>
+<dt><strong><a name="item_min_poll_time_2dspec">min_poll <em>time-spec</em></a></strong></dt>
+
+<dd>
+<p>For 'min_poll' see next item. A <em>time-spec</em> is a number followed by
+a unit 's' (seconds), or 'm' (minutes), or 'h' (hours), or 'd' (days).
+For example '3d' (three days) or '36h' (36 hours).</p>
+</dd>
+<dt><strong><a name="item_max_poll_time_2dspec">max_poll <em>time-spec</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify the maximum probe interval. When the program is
+called with option '-get update', all sites are probed which are :</p>
+<ul>
+<li><strong><a name="item_new">new</a></strong>
+
+<p>the site appears in the list, but there is no known state</p>
+</li>
+<li><strong><a name="item_bad">bad</a></strong>
+
+<p>the last probe of the site was unsuccessful</p>
+</li>
+<li><strong><a name="item_old">old</a></strong>
+
+<p>the last probe was more than 'max_poll' ago.</p>
+</li>
+</ul>
+<p>Sites are not probed if the last probe was less than 'min_poll' ago.
+So, if you specify</p>
+<pre>
+  min_poll 4h
+  max_poll 12h</pre>
+<p>the 'reachable' sites are probed twice daily and the 'unreachable'
+sites are probed at most six times a day.</p>
+<p>The default 'min_poll' is '1h' (1 hour).
+The default 'max_poll' is '4h' (4 hours).</p>
+</dd>
+<dt><strong><a name="item_min_sync_time_2dspec">min_sync <em>time-spec</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify how often the mirrors are required to make an update.</p>
+<p>The default 'min_sync' is '1d' (1 day).</p>
+</dd>
+<dt><strong><a name="item_max_sync_time_2dspec">max_sync <em>time-spec</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify the maximum allowable sync interval.</p>
+<p>Sites exceeding the limit will be considered 'old'.
+The default 'max_sync' is '2d' (2 days).</p>
+</dd>
+<dt><strong><a name="item_always_get_region__2e_2e_2e">always_get <em>region ...</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify a list of regions that must be probed always.</p>
+<pre>
+  always_get Master Tier1</pre>
+<p>This is intended for <em>fake regions</em> like <em>Master</em> etc.</p>
+</dd>
+<dt><strong><a name="item_no_randomize">no_randomize</a></strong></dt>
+
+<dd>
+<p>Mirmon tries to balance the probe load over the hourly mirmon runs.
+If the current run has a below average number of mirrors to probe,
+mirmon probes a few extra, randomly chosen mirrors, picked from the
+runs that have the highest load.</p>
+<p>If you don't want this behaviour, use <strong>no_randomize</strong>.</p>
+</dd>
+<dt><strong><a name="item_no_add_slash">no_add_slash</a></strong></dt>
+
+<dd>
+<p>If the url part of a line in the mirror_list doesn't end
+in a slash ('/'), mirmon adds a slash and issues a warning
+unless it is in quiet mode.</p>
+<p>If you don't want this behaviour, use <strong>no_add_slash</strong>.</p>
+</dd>
+<dt><strong><a name="item_list_style_plain_7capache">list_style plain|apache</a></strong></dt>
+
+<dd>
+<p>Optionally specify the format ('plain' or 'apache') of the mirror-list.</p>
+<p>See the description of 'mirror_list' above.
+The default list_style is 'plain'.</p>
+</dd>
+<dt><strong><a name="item_site_url_site_url">site_url <em>site</em> <em>url</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify a substitute url for a site.</p>
+<p>When access to a site is restricted (in Australia, for instance),
+another (sometimes secret) url can be used to probe the site.
+The &lt;site&gt; of an url is the part between '://' and the first '/'.</p>
+</dd>
+<dt><strong><a name="item_env_key_value">env <em>key</em> <em>value</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify an environment variable.</p>
+</dd>
+<dt><strong><a name="item_include_file_2dname">include <em>file-name</em></a></strong></dt>
+
+<dd>
+<p>Optionally specify a file to include.</p>
+<p>The specified file is processed 'in situ'. After the specified file is
+read and processed, config processing is resumed in the file where the
+<code>include</code> was encountered.
+The include depth is unlimited. However, it is a fatal error to
+include a file twice under the same name.</p>
+</dd>
+<dt><strong><a name="item_show">show</a></strong></dt>
+
+<dd>
+<p>When the config processor encounters the 'show' command, it
+dumps the content of the current config to standout, if option
+<a href="#item__2dv"><code>-v</code></a> is specified. This is intented for debugging.</p>
+</dd>
+<dt><strong><a name="item_exit">exit</a></strong></dt>
+
+<dd>
+<p>When the config processor encounters the 'exit' command, it
+terminates the program. This is intented for debugging.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="state_file_format">STATE FILE FORMAT</a></h1>
+<p>The state file consists of lines; one line per site.
+Each line consists of white space separated fields.
+The seven fields are :</p>
+<ul>
+<li><strong><a name="item_field_1__3a_url">field 1 : url</a></strong>
+
+<p>The url as given in the mirror list.</p>
+</li>
+<li><strong><a name="item_field_2__3a_age">field 2 : age</a></strong>
+
+<p>The mirror's timestamp found by the last successful probe,
+or 'undef' if no probe was ever successful.</p>
+</li>
+<li><strong><a name="item_field_3__3a_status_last_probe">field 3 : status last probe</a></strong>
+
+<p>The status of the last probe, or 'undef' if the mirror was never probed.</p>
+</li>
+<li><strong><a name="item_field_4__3a_time_last_successful_probe">field 4 : time last successful probe</a></strong>
+
+<p>The timestamp of the last successful probe or 'undef'
+if the mirror was never successfully probed.</p>
+</li>
+<li><strong><a name="item_field_5__3a_probe_history">field 5 : probe history</a></strong>
+
+<p>The probe history is a list of 's' (for success) and 'f' (for failure)
+characters indicating the result of the probe. New results are appended
+whenever the mirror is probed.</p>
+</li>
+<li><strong><a name="item_field_6__3a_state_history">field 6 : state history</a></strong>
+
+<p>The state history consists of a timestamp, a '-' char, and a list of
+chars indicating a past status: 's' (fresh), 'b' (oldish), 'f' (old),
+'z' (bad) or 'x' (skip).
+The timestamp indicates when the state history was last updated.
+The current status of the mirror is determined by the mirror's age and
+a few configuration parameters (min_sync, max_sync, max_poll).
+The state history is updated when the mirror is probed.
+If the last update of the history was less than 24 hours ago,
+the last status is replaced by the current status.
+If the last update of the history was more than 24 hours ago,
+the current status is appended to the history.
+One or more 'skip's is inserted, if the timestamp is two or more days old
+(when mirmon hasn't run for more than two days).</p>
+</li>
+<li><strong><a name="item_field_7__3a_last_probe">field 7 : last probe</a></strong>
+
+<p>The timestamp of the last probe, or 'undef' if the mirror was never probed.</p>
+</li>
+</ul>
+<p>
+</p>
+<hr />
+<h1><a name="installation">INSTALLATION</a></h1>
+<p>
+</p>
+<h2><a name="general">general</a></h2>
+<ul>
+<li><strong><a name="item_the">Note: The (empty) state file must exist before mirmon runs.</a></strong>
+
+</li>
+<li><strong><a name="item_the_mirmon_repository_is_here__3a">The mirmon repository is here :</a></strong>
+
+<pre>
+  https://svn.science.uu.nl/repos/project.mirmon/trunk/</pre>
+</li>
+<li><strong><a name="item_the_mirmon_tarball_is_here__3a">The mirmon tarball is here :</a></strong>
+
+<pre>
+  <a href="http://www.staff.science.uu.nl/~penni101/mirmon/mirmon.tar.gz">http://www.staff.science.uu.nl/~penni101/mirmon/mirmon.tar.gz</a></pre>
+</li>
+</ul>
+<p>
+</p>
+<h2><a name="installation_suggestions">installation suggestions</a></h2>
+<p>To install and configure mirmon, take the following steps :</p>
+<ul>
+<li><strong><a name="item_first_2c_make_the_webdir__3a">First, make the webdir :</a></strong>
+
+<pre>
+  cd DOCUMENTROOT
+  mkdir mirmon</pre>
+<p>For <em>DOCUMENTROOT</em>, substitute the full pathname
+of the document root of your webserver.</p>
+</li>
+<li><strong><a name="item_check_out_the_mirmon_repository__3a">Check out the mirmon repository :</a></strong>
+
+<pre>
+  cd /usr/local/src
+  svn checkout REPO mirmon</pre>
+<p>where</p>
+<pre>
+  REPO = https://svn.science.uu.nl/repos/project.mirmon/trunk/</pre>
+<p>or download the package and unpack it.</p>
+</li>
+<li><strong><a name="item_chdir_to_directory_mirmon__3a">Chdir to directory mirmon :</a></strong>
+
+<pre>
+  cd mirmon</pre>
+</li>
+<li><strong><a name="item_the">Create the (empty) state file :</a></strong>
+
+<pre>
+  touch state.txt</pre>
+</li>
+<li><strong><a name="item_install_the_icons_in_the_webdir__3a">Install the icons in the webdir :</a></strong>
+
+<pre>
+  mkdir DOCUMENTROOT/mirmon/icons
+  cp icons/* DOCUMENTROOT/mirmon/icons</pre>
+</li>
+<li><strong><a name="item_create_a_mirror_list_mirror_list__3b">Create a mirror list <code>mirror_list</code> ;</a></strong>
+
+<p>Use your favorite editor, or genererate the list from an
+existing database.</p>
+<pre>
+  nl <a href="http://archive.cs.uu.nl/your-project/">http://archive.cs.uu.nl/your-project/</a> contact@cs.uu.nl
+  uk <a href="http://mirrors.this.org/your-project/">http://mirrors.this.org/your-project/</a> mirrors@this.org
+  us <a href="http://mirrors.that.org/your-project/">http://mirrors.that.org/your-project/</a> mirrors@that.org</pre>
+<p>The email addresses are optional.</p>
+</li>
+<li><strong><a name="item_create_a_mirmon_config_file_mirmon_2econf_with_you">Create a mirmon config file <code>mirmon.conf</code> with your favorite editor.</a></strong>
+
+<pre>
+  # lines must start in the first column ; no leading white space
+  project_name ....
+  project_url  ....
+  mirror_list mirror_list
+  state state.txt
+  countries countries.list
+  web_page DOCUMENTROOT/mirmon/index.html
+  icons /mirmon/icons
+  probe /usr/bin/wget -q -O - -T %TIMEOUT% -t 1 %URL%TIME.txt</pre>
+<p>This assumes the project's timestamp is in file <code>TIME.txt</code>.</p>
+</li>
+<li><strong><a name="item_if_you_have_rsync_urls_2c_change_the_probe_line_to">If you have rsync urls, change the probe line to :</a></strong>
+
+<pre>
+  probe perl /usr/local/src/mirmon/probe -t %TIMEOUT% %URL%TIME.txt</pre>
+</li>
+<li><strong><a name="item_run_mirmon__3a">Run mirmon :</a></strong>
+
+<pre>
+  perl mirmon -v -get all</pre>
+<p>The mirmon report should now be in 'DOCUMENTROOT/mirmon/index.html'</p>
+<pre>
+  <a href="http://www.your.project.org/mirmon/">http://www.your.project.org/mirmon/</a></pre>
+</li>
+<li><strong><a name="item_if_2fwhen_2c_at_a_later_date_2c_you_want_to_upgrad">If/when, at a later date, you want to upgrade mirmon :</a></strong>
+
+<pre>
+  cd /usr/local/src/mirmon
+  svn status -u
+  svn up</pre>
+</li>
+</ul>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>
+<a href="mirmon.pm.html">mirmon.pm(3)</a>
+</p><p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+  <p>
+  &copy; 2003-2013
+  <a href="http://www.staff.science.uu.nl/~penni101/">Henk P. Penning</a>,
+  <a href="http://www.uu.nl/faculty/science/EN/">Faculty of Science</a>,
+  <a href="http://www.uu.nl/">Utrecht University</a>
+  <br />
+  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp ;
+  <a href="http://validator.w3.org/check?uri=referer">verify html</a>
+  </p>
+</body>
+
+</html>

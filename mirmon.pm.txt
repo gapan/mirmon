@@ -1,0 +1,171 @@
+Mirmon(3)            User Contributed Perl Documentation            Mirmon(3)
+
+
+
+NNAAMMEE
+       Mirmon - OO interface for mirmon objects
+
+SSYYNNOOPPSSIISS
+         use Mirmon ;
+
+         $m = Mirmon -> new ( [ $path-to-config ] )
+
+         $conf  = $m -> conf  ; # a Mirmon::Conf object
+         $state = $m -> state ; # the mirmon state
+
+         for my $url ( keys %$state )
+           { $mirror = $state -> { $url } ; # a Mirmon::Mirror object
+             $mail = $mirror -> mail ;      # contact address
+             $mirror -> age ( time ) ;      # set mirror age
+           }
+
+       Many class and object methods can be used to get or set attributes :
+
+         $object -> attribute           # get an atttibute
+         $object -> attribute ( $attr ) # set an atttibute
+
+MMiirrmmoonn ccllaassss mmeetthhooddss
+       nneeww (( [[$$ppaatthh]] ))
+           Create a Mirmon object from a config file found in $path, or (by
+           default) in the default list of possible config files.  Related
+           objects (config, state) are created and initialised.
+
+       verbosity
+           Mirmon always reports errors. Normally it only reports changes
+           (inserts/deletes) found in the mirror_list ; in _q_u_i_e_t mode, it
+           doesn’t. In _v_e_r_b_o_s_e mode, it reports progress: the startup and
+           finishing of probes.
+
+             Mirmon::verbose ( [ $bool ] ) # get/set verbose
+             Mirmon::quiet   ( [ $bool ] ) # get/set quiet
+             Mirmon::debug   ( [ $bool ] ) # get/set debug
+
+MMiirrmmoonn oobbjjeecctt mmeetthhooddss
+       ccoonnff
+           Returns Mirmon’s Mirmon::Conf object.
+
+       ssttaattee
+           Returns a hashref "{ url => mirror, ... }", where _u_r_l is as
+           specified in the mirror list and _m_i_r_r_o_r is a Mirmon::Mirror
+           object.
+
+       rreeggiioonnss
+           Returns a hashref "{ country_code => country_name, ... }".
+
+       ccoonnffiigg__lliisstt
+           Returns the list of default locations for config files.
+
+       ggeett__ddaatteess (( $$ggeett ))
+           Probes all mirrors if $get is "all" ; or a subset if $get is
+           "update".
+
+MMiirrmmoonn::::CCoonnff oobbjjeecctt mmeetthhooddss
+       A Mirmon::Conf object represents a mirmon conguration.  It is normaly
+       created by _M_i_r_m_o_n_:_:_n_e_w_(_).  A specified (or default) config file is
+       read and interpreted.
+
+       attribute methods
+           For every config file entry, there is an attribute method :
+           wweebb__ppaaggee, ssttaattee, ccoouunnttrriieess, mmiirrrroorr__lliisstt, pprroobbee, pprroojjeecctt__nnaammee,
+           pprroojjeecctt__uurrll, iiccoonnss, pprroojjeecctt__llooggoo, ttiimmeeoouutt, mmaaxx__pprroobbeess, mmiinn__ppoollll,
+           mmaaxx__ppoollll, mmiinn__ssyynncc, mmaaxx__ssyynncc, lliisstt__ssttyyllee, ppuutt__hhiissttoo, rraannddoommiizzee,
+           aadddd__ssllaasshh.
+
+       rroooott
+           Returns the file name of (the root of) the configuration file(s).
+
+       ssiittee__uurrll
+           Returns a hashref "{ site => url, ... }", as specified in the
+           mirmon config file.
+
+MMiirrmmoonn::::MMiirrrroorr oobbjjeecctt mmeetthhooddss
+       A Mirmon::Mirror object represents the last known state of a mirror.
+       It is normaly created by _M_i_r_m_o_n_:_:_n_e_w_(_) from the state file, as
+       specified in the mirmon config file.  Mirmon::Mirror objects can be
+       used to probe mirrors.
+
+   aattttrriibbuuttee mmeetthhooddss
+       uurrll The url as given in the mirror list.
+
+       aaggee The mirror’s timestamp found by the last successful probe, or
+           ’undef’ if no probe was ever successful.
+
+       llaasstt__ssttaattuuss
+           The status of the last probe, or ’undef’ if the mirror was never
+           probed.
+
+       llaasstt__ookk__pprroobbee
+           The timestamp of the last successful probe or ’undef’ if the
+           mirror was never successfully probed.
+
+       pprroobbee__hhiissttoorryy
+           The probe history is a list of ’s’ (for success) and ’f’ (for
+           failure) characters indicating the result of the probe. New
+           results are appended whenever the mirror is probed.
+
+       ssttaattee__hhiissttoorryy
+           The state history consists of a timestamp, a ’-’ char, and a list
+           of chars indicating a past status: ’s’ (fresh), ’b’ (oldish), ’f’
+           (old), ’z’ (bad) or ’x’ (skip).  The timestamp indicates when the
+           state history was last updated.  The current status of the mirror
+           is determined by the mirror’s age and a few configuration
+           parameters (min_sync, max_sync, max_poll).  The state history is
+           updated when the mirror is probed.  If the last update of the
+           history was less than 24 hours ago, the last status is replaced by
+           the current status.  If the last update of the history was more
+           than 24 hours ago, the current status is appended to the history.
+           One or more ’skip’s are inserted, if the timestamp is two or more
+           days old (when mirmon hasn’t run for more than two days).
+
+       llaasstt__pprroobbee
+           The timestamp of the last probe, or ’undef’ if the mirror was
+           never probed.
+
+   oobbjjeecctt mmeetthhooddss
+       mmiirrmmoonn
+           Returns the parent Mirmon object.
+
+       ssttaattee__hhiissttoorryy__ttiimmee
+           Returns the _t_i_m_e part of the state_history attribute.
+
+       ssttaattee__hhiissttoorryy__hhiisstt
+           Returns the _h_i_s_t_o_r_y part of the state_history attribute.
+
+       ttyyppee, ssiittee, hhoommee
+           For an url like _f_t_p_:_/_/_w_w_w_._s_o_m_e_._o_r_g_/_p_a_t_h_/_t_o_/_h_o_m_e, the ttyyppee is _f_t_p,
+           the ssiittee is _w_w_w_._s_o_m_e_._o_r_g, and hhoommee is _f_t_p_:_/_/_w_w_w_._s_o_m_e_._o_r_g_/.
+
+       aaggee__iinn__ddaayyss
+           Returns the mirror’s age (in fractional days), based on the
+           mirror’s timestamp as found by the last successful probe ; or
+           based on the length of the state history if no probe was ever
+           successful.  Returns ’undef’ if the mirror was never probed.
+
+       mmaaiill
+           Returns the mirror’s contact address as specified in the mirror
+           list.
+
+       rreeggiioonn
+           Returns the mirror’s country code as specified in the mirror list.
+
+       ssttaarrtt__pprroobbee
+           Start a probe for the mirror in non-blocking mode ; returns the
+           associated (IO::Handle) file handle.  The caller must maintain an
+           association between the handles and the mirror objects.
+
+       ffiinniisshh__pprroobbee (( $$hhaannddllee ))
+           Sets the (IO::Handle) $$hhaannddllee to blocking IO ; reads a result from
+           the handle, and updates the state of the mirror.
+
+SSEEEE AALLSSOO
+       mirmon(1)
+
+AAUUTTHHOORR
+         (c) 2003-2013 Henk P. Penning
+         Faculty of Science, Utrecht University
+         http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
+         mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp
+
+
+
+perl v5.8.5                       2013-08-13                        Mirmon(3)

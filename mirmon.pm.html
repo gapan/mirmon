@@ -1,0 +1,300 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!--
+
+This file is generated from pod source by user 'csg'.
+
+Generator : trunk/admin/doc/pod2htm
+Source    : trunk/admin/doc/../Mirmon.pm
+Date/time : Tue Aug 13 06:50:43 2013 [UTC]
+
+-->
+<head>
+<title>Mirmon - OO interface for mirmon objects</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#mirmon_class_methods">Mirmon class methods</a></li>
+	<li><a href="#mirmon_object_methods">Mirmon object methods</a></li>
+	<li><a href="#mirmon__conf_object_methods">Mirmon::Conf object methods</a></li>
+	<li><a href="#mirmon__mirror_object_methods">Mirmon::Mirror object methods</a>
+	<ul>
+		<li><a href="#attribute_methods">attribute methods</a></li>
+		<li><a href="#object_methods">object methods</a></li>
+	</ul></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a>
+</li></ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>Mirmon - OO interface for mirmon objects</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use Mirmon ;</pre>
+<pre>
+  $m = Mirmon -&gt; new ( [ $path-to-config ] )</pre>
+<pre>
+  $conf  = $m -&gt; conf  ; # a Mirmon::Conf object
+  $state = $m -&gt; state ; # the mirmon state</pre>
+<pre>
+  for my $url ( keys %$state )
+    { $mirror = $state -&gt; { $url } ; # a Mirmon::Mirror object
+      $mail = $mirror -&gt; mail ;      # contact address
+      $mirror -&gt; age ( time ) ;      # set mirror age
+    }</pre>
+<p>Many class and object methods can be used to get or set attributes :</p>
+<pre>
+  $object -&gt; attribute           # get an atttibute
+  $object -&gt; attribute ( $attr ) # set an atttibute</pre>
+<p>
+</p>
+<hr />
+<h1><a name="mirmon_class_methods">Mirmon class methods</a></h1>
+<dl>
+<dt><strong><a name="item_new"><strong>new ( [$path] )</strong></a></strong></dt>
+
+<dd>
+<p>Create a Mirmon object from a config file found in $path,
+or (by default) in the default list of possible config files.
+Related objects (config, state) are created and initialised.</p>
+</dd>
+<dt><strong><a name="item_verbosity">verbosity</a></strong></dt>
+
+<dd>
+<p>Mirmon always reports errors. Normally it only reports
+changes (inserts/deletes) found in the mirror_list ;
+in <em>quiet</em> mode, it doesn't. In <em>verbose</em> mode, it
+reports progress: the startup and finishing of probes.</p>
+<pre>
+  Mirmon::verbose ( [ $bool ] ) # get/set verbose
+  Mirmon::quiet   ( [ $bool ] ) # get/set quiet
+  Mirmon::debug   ( [ $bool ] ) # get/set debug</pre>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="mirmon_object_methods">Mirmon object methods</a></h1>
+<dl>
+<dt><strong><a name="item_conf"><strong>conf</strong></a></strong></dt>
+
+<dd>
+<p>Returns Mirmon's Mirmon::Conf object.</p>
+</dd>
+<dt><strong><a name="item_state"><strong>state</strong></a></strong></dt>
+
+<dd>
+<p>Returns a hashref <code>{ url =&gt; mirror, ... }</code>,
+where <em>url</em> is as specified in the mirror list
+and <em>mirror</em> is a Mirmon::Mirror object.</p>
+</dd>
+<dt><strong><a name="item_regions"><strong>regions</strong></a></strong></dt>
+
+<dd>
+<p>Returns a hashref <code>{ country_code =&gt; country_name, ... }</code>.</p>
+</dd>
+<dt><strong><a name="item_config_list"><strong>config_list</strong></a></strong></dt>
+
+<dd>
+<p>Returns the list of default locations for config files.</p>
+</dd>
+<dt><strong><a name="item_get_dates"><strong>get_dates ( $get )</strong></a></strong></dt>
+
+<dd>
+<p>Probes all mirrors if $get is <code>all</code> ; or a subset if $get is <code>update</code>.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="mirmon__conf_object_methods">Mirmon::Conf object methods</a></h1>
+<p>A Mirmon::Conf object represents a mirmon conguration.
+It is normaly created by Mirmon::new().
+A specified (or default) config file is read and interpreted.</p>
+<dl>
+<dt><strong><a name="item_attribute_methods">attribute methods</a></strong></dt>
+
+<dd>
+<p>For every config file entry, there is an attribute method :
+<strong>web_page</strong>, <strong>state</strong>, <strong>countries</strong>, <strong>mirror_list</strong>, <strong>probe</strong>,
+<strong>project_name</strong>, <strong>project_url</strong>, <strong>icons</strong>, <strong>project_logo</strong>,
+<strong>timeout</strong>, <strong>max_probes</strong>, <strong>min_poll</strong>, <strong>max_poll</strong>, <strong>min_sync</strong>,
+<strong>max_sync</strong>, <strong>list_style</strong>, <strong>put_histo</strong>, <strong>randomize</strong>, <strong>add_slash</strong>.</p>
+</dd>
+<dt><strong><a name="item_root"><strong>root</strong></a></strong></dt>
+
+<dd>
+<p>Returns the file name of (the root of) the configuration file(s).</p>
+</dd>
+<dt><strong><a name="item_site_url"><strong>site_url</strong></a></strong></dt>
+
+<dd>
+<p>Returns a hashref <code>{ site =&gt; url, ... }</code>,
+as specified in the mirmon config file.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="mirmon__mirror_object_methods">Mirmon::Mirror object methods</a></h1>
+<p>A Mirmon::Mirror object represents the last known state of a mirror.
+It is normaly created by Mirmon::new() from the state file,
+as specified in the mirmon config file.
+Mirmon::Mirror objects can be used to probe mirrors.</p>
+<p>
+</p>
+<h2><a name="attribute_methods">attribute methods</a></h2>
+<dl>
+<dt><strong><a name="item_url"><strong>url</strong></a></strong></dt>
+
+<dd>
+<p>The url as given in the mirror list.</p>
+</dd>
+<dt><strong><a name="item_age"><strong>age</strong></a></strong></dt>
+
+<dd>
+<p>The mirror's timestamp found by the last successful probe,
+or 'undef' if no probe was ever successful.</p>
+</dd>
+<dt><strong><a name="item_last_status"><strong>last_status</strong></a></strong></dt>
+
+<dd>
+<p>The status of the last probe, or 'undef' if the mirror was never probed.</p>
+</dd>
+<dt><strong><a name="item_last_ok_probe"><strong>last_ok_probe</strong></a></strong></dt>
+
+<dd>
+<p>The timestamp of the last successful probe or 'undef'
+if the mirror was never successfully probed.</p>
+</dd>
+<dt><strong><a name="item_probe_history"><strong>probe_history</strong></a></strong></dt>
+
+<dd>
+<p>The probe history is a list of 's' (for success) and 'f' (for failure)
+characters indicating the result of the probe. New results are appended
+whenever the mirror is probed.</p>
+</dd>
+<dt><strong><a name="item_state_history"><strong>state_history</strong></a></strong></dt>
+
+<dd>
+<p>The state history consists of a timestamp, a '-' char, and a list of
+chars indicating a past status: 's' (fresh), 'b' (oldish), 'f' (old),
+'z' (bad) or 'x' (skip).
+The timestamp indicates when the state history was last updated.
+The current status of the mirror is determined by the mirror's age and
+a few configuration parameters (min_sync, max_sync, max_poll).
+The state history is updated when the mirror is probed.
+If the last update of the history was less than 24 hours ago,
+the last status is replaced by the current status.
+If the last update of the history was more than 24 hours ago,
+the current status is appended to the history.
+One or more 'skip's are inserted, if the timestamp is two or more days old
+(when mirmon hasn't run for more than two days).</p>
+</dd>
+<dt><strong><a name="item_last_probe"><strong>last_probe</strong></a></strong></dt>
+
+<dd>
+<p>The timestamp of the last probe, or 'undef' if the mirror was never probed.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="object_methods">object methods</a></h2>
+<dl>
+<dt><strong><a name="item_mirmon"><strong>mirmon</strong></a></strong></dt>
+
+<dd>
+<p>Returns the parent Mirmon object.</p>
+</dd>
+<dt><strong><a name="item_state_history_time"><strong>state_history_time</strong></a></strong></dt>
+
+<dd>
+<p>Returns the <em>time</em> part of the state_history attribute.</p>
+</dd>
+<dt><strong><a name="item_state_history_hist"><strong>state_history_hist</strong></a></strong></dt>
+
+<dd>
+<p>Returns the <em>history</em> part of the state_history attribute.</p>
+</dd>
+<dt><strong><a name="item_type_2c_site_2c_home"><strong>type</strong>, <strong>site</strong>, <strong>home</strong></a></strong></dt>
+
+<dd>
+<p>For an url like <em><a href="ftp://www.some.org/path/to/home">ftp://www.some.org/path/to/home</a></em>,
+the <strong>type</strong> is <em>ftp</em>,
+the <strong>site</strong> is <em>www.some.org</em>,
+and <strong>home</strong> is <em><a href="ftp://www.some.org/">ftp://www.some.org/</a></em>.</p>
+</dd>
+<dt><strong><a name="item_age_in_days"><strong>age_in_days</strong></a></strong></dt>
+
+<dd>
+<p>Returns the mirror's age (in fractional days), based on the mirror's
+timestamp as found by the last successful probe ; or based on the
+length of the state history if no probe was ever successful.
+Returns 'undef' if the mirror was never probed.</p>
+</dd>
+<dt><strong><a name="item_mail"><strong>mail</strong></a></strong></dt>
+
+<dd>
+<p>Returns the mirror's contact address as specified in the mirror list.</p>
+</dd>
+<dt><strong><a name="item_region"><strong>region</strong></a></strong></dt>
+
+<dd>
+<p>Returns the mirror's country code as specified in the mirror list.</p>
+</dd>
+<dt><strong><a name="item_start_probe"><strong>start_probe</strong></a></strong></dt>
+
+<dd>
+<p>Start a probe for the mirror in non-blocking mode ;
+returns the associated (IO::Handle) file handle.
+The caller must maintain an association between
+the handles and the mirror objects.</p>
+</dd>
+<dt><strong><a name="item_finish_probe"><strong>finish_probe ( $handle )</strong></a></strong></dt>
+
+<dd>
+<p>Sets the (IO::Handle) <strong>$handle</strong> to blocking IO ;
+reads a result from the handle,
+and updates the state of the mirror.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>
+<a href="mirmon.html">mirmon(1)</a>
+</p><p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+  <p>
+  &copy; 2003-2013
+  <a href="http://www.staff.science.uu.nl/~penni101/">Henk P. Penning</a>,
+  <a href="http://www.uu.nl/faculty/science/EN/">Faculty of Science</a>,
+  <a href="http://www.uu.nl/">Utrecht University</a>
+  <br />
+  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp ;
+  <a href="http://validator.w3.org/check?uri=referer">verify html</a>
+  </p>
+</body>
+
+</html>

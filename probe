@@ -1,0 +1,76 @@
+#! /usr/bin/perl -w
+
+use strict ;
+
+my $WGET  = '/usr/bin/wget' ;
+my $RSYNC = '/usr/bin/rsync' ;
+
+my $timeout = 300 ;
+my $tmp_dir = '/tmp/mirmon' ;
+
+my $prog = substr($0,rindex($0,'/')+1) ;
+my $Usage = <<USAGE ;
+Usage: $prog [-v] [-q] [-d] [-t timeout] url
+option v : be verbose
+option q : be quiet
+option d : show debug info
+option t : timeout in seconds (default $timeout)
+argument url :
+  rsync://host.dom.com/module/file
+   http://host.dom.com/some/file
+    ftp://host.dom.com/some/file
+USAGE
+sub Usage { die "$_[0]$Usage" ; }
+sub Error { die "$prog: $_[0]\n" ; }
+sub Warn  { warn "$prog: $_[0]\n" ; }
+
+# usage: &GetOptions(ARG,ARG,..) defines $opt_ID as 1 or user spec'ed value
+# usage: &GetOptions(\%opt,ARG,ARG,..) defines $opt{ID} as 1 or user value
+# ARG = 'ID' | 'ID=SPC' | 'ID:SPC' for no-arg, required-arg or optional-arg
+# ID  = perl identifier
+# SPC = i|f|s for integer, fixedpoint real or string argument
+
+use Getopt::Long ;
+Getopt::Long::config('no_ignore_case') ;
+my %opt = () ; Usage('') unless GetOptions
+  ( \%opt, qw(v q d t=i) ) ;
+Usage("Arg count\n") unless @ARGV == 1 ;
+
+my $url = shift ;
+$timeout = $opt{t} if exists $opt{t} ;
+$opt{v} ||= $opt{d} ;
+
+my $opt_v = '' ; $opt_v = '-v' if $opt{v} ;
+my $opt_q = '' ; $opt_q = '-q' if $opt{q} ;
+
+# make a tmp dir for rsync
+
+-d $tmp_dir or mkdir $tmp_dir or Error "can't mkdir $tmp_dir ($!)" ;
+
+# handle rsync urls with rsync
+#  rewrite rysnc://host.dom.com/module/file -> host.dom.com::module/file
+# handle ftp/http urls with wget
+
+if ( $url =~ m!^rsync://(.*)$! )
+  { my $src = $1 ;
+    my $dst = $src ;
+    $dst =~ s![/\s]!_!g ;
+    my $TMP = "$tmp_dir/$dst" ;
+    $src =~ s!/!::! ;
+    unlink $TMP ; # ignore status
+    my $cmd = "$RSYNC $opt_v $opt_q --no-motd --timeout $timeout $src $TMP" ;
+    Warn sprintf "'%s'\n", $cmd if $opt{d} ;
+    system $cmd ;
+    if ( open TMP, $TMP )
+      { print <TMP> ; close TMP ; }
+    else
+      { Warn "can't open $TMP" ; }
+  }
+else
+  { my $cmd = "$WGET -O - $opt_v $opt_q -t 1 -T $timeout $url |" ;
+    Warn sprintf "'%s'\n", $cmd if $opt{d} ;
+    if ( open CMD, $cmd )
+      { print <CMD> ; close CMD ; }
+    else
+      { Warn "can't popen $cmd ($!)" ; }
+  }
