@@ -7,6 +7,11 @@ Upgrading :
    http://www.staff.science.uu.nl/~penni101/mirmon/svn/trunk/countries.list
 
 ----------------------------------------------------------------------
+mirmon 2.10 -- 15 augustus 2014
+
+o Probe only one site-url with "mirmon -get url site-url".
+
+----------------------------------------------------------------------
 mirmon 2.9 -- 13 augustus 2013
 
 o Added a LICENSE file, requested by fedora packagers.

@@ -7,7 +7,7 @@ This file is generated from pod source by user 'csg'.
 
 Generator : trunk/admin/doc/pod2htm
 Source    : trunk/admin/doc/../Mirmon.pm
-Date/time : Tue Aug 13 06:50:43 2013 [UTC]
+Date/time : Fri Aug 15 12:26:56 2014 [UTC]
 
 -->
 <head>
@@ -116,10 +116,11 @@ and <em>mirror</em> is a Mirmon::Mirror object.</p>
 <dd>
 <p>Returns the list of default locations for config files.</p>
 </dd>
-<dt><strong><a name="item_get_dates"><strong>get_dates ( $get )</strong></a></strong></dt>
+<dt><strong><a name="item_get_dates"><strong>get_dates ( $get [, $URL] )</strong></a></strong></dt>
 
 <dd>
-<p>Probes all mirrors if $get is <code>all</code> ; or a subset if $get is <code>update</code>.</p>
+<p>Probes all mirrors if $get is <code>all</code> ; or a subset if $get is <code>update</code> ;
+or only <em>$URL</em> if $get is <a href="#item_url"><code>url</code></a>.</p>
 </dd>
 </dl>
 <p>
@@ -287,12 +288,12 @@ and updates the state of the mirror.</p>
 <hr />
 <h1><a name="author">AUTHOR</a></h1>
   <p>
-  &copy; 2003-2013
+  &copy; 2003-2014
   <a href="http://www.staff.science.uu.nl/~penni101/">Henk P. Penning</a>,
   <a href="http://www.uu.nl/faculty/science/EN/">Faculty of Science</a>,
   <a href="http://www.uu.nl/">Utrecht University</a>
   <br />
-  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp ;
+  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp ;
   <a href="http://validator.w3.org/check?uri=referer">verify html</a>
   </p>
 </body>

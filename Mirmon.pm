@@ -1,6 +1,6 @@
 #! /usr/bin/perl -w
 
-# Copyright (c) 2003-2013 Henk Penning, all rights reserved.
+# Copyright (c) 2003-2014 Henk Penning, all rights reserved.
 # penning@uu.nl, http://www.staff.science.uu.nl/~penni101/
 # Version 1.1 was donated to the Apache Software Foundation 2003 Jan 28.
 #
@@ -29,13 +29,13 @@
 use strict ;
 
 our $PRG = 'mirmon' ;
-our $VER = "2.9" ;
+our $VER = "2.10" ;
 
 our $DEF_TIMEOUT = 300 ;
 our $HIST        = 14 ;
 our $TIM_PAT     = '^(\d+)([smhd])$' ;
 our %APA_TYPES   = () ; $APA_TYPES { $_ } ++ for qw(backup ftp http rsync) ;
-our %GET_OPTS    = () ; $GET_OPTS  { $_ } ++ for qw(all update) ;
+our %GET_OPTS    = () ; $GET_OPTS  { $_ } ++ for qw(all update url) ;
 our $HIST_DELTA  = 24 * 60 * 60 ;
 our $APRX_DELTA  = 300 ;
 our $HOME        = 'http://www.staff.science.uu.nl/~penni101/mirmon/' ;
@@ -212,7 +212,7 @@ sub find_config
   { my $self = shift ;
     my $arg = shift ;
     my @LIST = $arg ? ( $arg ) : Mirmon -> config_list ;
-    for my $conf ( @LIST ) { return $conf if -f $conf ; }
+    for my $conf ( @LIST ) { return $conf if -r $conf and ! -d $conf ; }
     die sprintf "can't find a config file :\n  %s\n" , join "\n  ", @LIST ;
   }
 
@@ -418,6 +418,7 @@ sub _randomize
 sub get_dates
   { my $self  = shift ;
     my $get   = shift ;
+    my $URL   = shift ;
     my $state = $self -> state ;
     my $conf  = $self -> conf ;
     my $CMD   = $conf -> probe ;
@@ -435,6 +436,8 @@ sub get_dates
 
     if ( $get eq 'all' )
       { @QUE = sort { $a -> url cmp $b -> url } values %$state ; }
+    elsif ( $get eq 'url' )
+      { @QUE = ( $state -> { $URL } ) ; }
     elsif ( $get eq 'update' )
       { my $maxp = $^T - $max_poll ;
         my $minp = $^T - $min_poll ;
@@ -1671,9 +1674,10 @@ Returns a hashref C<< { country_code =E<gt> country_name, ... } >>.
 
 Returns the list of default locations for config files.
 
-=item B<get_dates ( $get )>
+=item B<get_dates ( $get [, $URL] )>
 
-Probes all mirrors if $get is C<all> ; or a subset if $get is C<update>.
+Probes all mirrors if $get is C<all> ; or a subset if $get is C<update> ;
+or only I<$URL> if $get is C<url>.
 
 =back
 
@@ -1835,12 +1839,12 @@ mirmon(1)
 =begin html
 
   <p>
-  &copy; 2003-2013
+  &copy; 2003-2014
   <a href="http://www.staff.science.uu.nl/~penni101/">Henk P. Penning</a>,
   <a href="http://www.uu.nl/faculty/science/EN/">Faculty of Science</a>,
   <a href="http://www.uu.nl/">Utrecht University</a>
   <br />
-  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp ;
+  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp ;
   <a href="http://validator.w3.org/check?uri=referer">verify html</a>
   </p>
 
@@ -1848,19 +1852,19 @@ mirmon(1)
 
 =begin man
 
-  (c) 2003-2013 Henk P. Penning
+  (c) 2003-2014 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp
+  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
 
 =end man
 
 =begin text
 
-  (c) 2003-2013 Henk P. Penning
+  (c) 2003-2014 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp
+  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
 
 =end text
 

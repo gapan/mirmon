@@ -55,9 +55,9 @@ MMiirrmmoonn oobbjjeecctt mmeetthhooddss
        ccoonnffiigg__lliisstt
            Returns the list of default locations for config files.
 
-       ggeett__ddaatteess (( $$ggeett ))
+       ggeett__ddaatteess (( $$ggeett [[,, _$$_UU_RR_LL]] ))
            Probes all mirrors if $get is "all" ; or a subset if $get is
-           "update".
+           "update" ; or only _$_U_R_L if $get is "url".
 
 MMiirrmmoonn::::CCoonnff oobbjjeecctt mmeetthhooddss
        A Mirmon::Conf object represents a mirmon conguration.  It is normaly
@@ -161,11 +161,11 @@ SSEEEE AALLSSOO
        mirmon(1)
 
 AAUUTTHHOORR
-         (c) 2003-2013 Henk P. Penning
+         (c) 2003-2014 Henk P. Penning
          Faculty of Science, Utrecht University
          http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-         mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp
+         mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
 
 
 
-perl v5.8.5                       2013-08-13                        Mirmon(3)
+perl v5.8.5                       2014-08-15                        Mirmon(3)

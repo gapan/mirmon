@@ -7,7 +7,7 @@ This file is generated from pod source by user 'csg'.
 
 Generator : trunk/admin/doc/pod2htm
 Source    : trunk/admin/doc/../mirmon.pl
-Date/time : Tue Aug 13 06:50:43 2013 [UTC]
+Date/time : Fri Aug 15 12:26:56 2014 [UTC]
 
 -->
 <head>
@@ -55,7 +55,7 @@ Date/time : Tue Aug 13 06:50:43 2013 [UTC]
 <hr />
 <h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
-  mirmon [ -v ] [ -q ] [ -t timeout ] [ -get opt ] [ -c conf ]</pre>
+  mirmon [-v] [-q] [-t timeout] [-c conf] [-get all|update|url url]</pre>
 <p>
 </p>
 <hr />
@@ -77,12 +77,12 @@ errors and changes in the mirror list.</p>
 <dd>
 <p>Set the timeout ; the default is <em>300</em>.</p>
 </dd>
-<dt><strong><a name="item__2dget_all__7c_update"><strong>-get</strong> <em>all</em> | <em>update</em></a></strong></dt>
+<dt><strong><a name="item__2dget_all__7c_update__7c_url__3curl_3e"><strong>-get</strong> all | update | url &lt;url&gt;</a></strong></dt>
 
 <dd>
-<p>With <em>all</em>, probe all sites ;
-with <em>update</em>, probe a selection of the sites ;
-see option <code>max_poll</code> below.</p>
+<p>With <strong>all</strong>, probe all sites.
+With <strong>update</strong>, probe a selection of the sites ; see option <code>max_poll</code> below.
+With <strong>url</strong>, probe only the given <em>url</em>, which must appear in the mirror-list.</p>
 </dd>
 <dt><strong><a name="item__2dc_name"><strong>-c</strong> <em>name</em></a></strong></dt>
 
@@ -627,12 +627,12 @@ existing database.</p>
 <hr />
 <h1><a name="author">AUTHOR</a></h1>
   <p>
-  &copy; 2003-2013
+  &copy; 2003-2014
   <a href="http://www.staff.science.uu.nl/~penni101/">Henk P. Penning</a>,
   <a href="http://www.uu.nl/faculty/science/EN/">Faculty of Science</a>,
   <a href="http://www.uu.nl/">Utrecht University</a>
   <br />
-  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp ;
+  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp ;
   <a href="http://validator.w3.org/check?uri=referer">verify html</a>
   </p>
 </body>

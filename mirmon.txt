@@ -6,7 +6,7 @@ NNAAMMEE
        mirmon - monitor the state of mirrors
 
 SSYYNNOOPPSSIISS
-         mirmon [ -v ] [ -q ] [ -t timeout ] [ -get opt ] [ -c conf ]
+         mirmon [-v] [-q] [-t timeout] [-c conf] [-get all|update|url url]
 
 OOPPTTIIOONNSS
        --vv  Be verbose ; mmiirrmmoonn normally only reports errors and changes in
@@ -17,9 +17,10 @@ OOPPTTIIOONNSS
        --tt _t_i_m_e_o_u_t
            Set the timeout ; the default is _3_0_0.
 
-       --ggeett _a_l_l | _u_p_d_a_t_e
-           With _a_l_l, probe all sites ; with _u_p_d_a_t_e, probe a selection of the
-           sites ; see option "max_poll" below.
+       --ggeett all | update | url <url>
+           With aallll, probe all sites.  With uuppddaattee, probe a selection of the
+           sites ; see option "max_poll" below.  With uurrll, probe only the
+           given _u_r_l, which must appear in the mirror-list.
 
        --cc _n_a_m_e
            Use config file _n_a_m_e. The default list is
@@ -484,11 +485,11 @@ SSEEEE AALLSSOO
        mirmon.pm(3)
 
 AAUUTTHHOORR
-         (c) 2003-2013 Henk P. Penning
+         (c) 2003-2014 Henk P. Penning
          Faculty of Science, Utrecht University
          http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-         mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp
+         mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
 
 
 
-perl v5.8.5                       2013-08-13                        MIRMON(1)
+perl v5.8.5                       2014-08-15                        MIRMON(1)

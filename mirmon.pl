@@ -12,18 +12,19 @@ use IO::Pipe ;
 use IO::Select ;
 use Net::hostent ;
 
-my $VERSION = Base::Version . ' - Tue Aug 13 06:48:23 2013 - henkp' ;
+my $VERSION = Base::Version . ' - Fri Aug 15 12:26:55 2014 - henkp' ;
 my $DEF_CNF = join ', ', Mirmon -> config_list ;
 my $TIMEOUT = Base::DEF_TIMEOUT ;
 
 my $prog = substr $0, rindex ( $0, '/' ) + 1 ;
 my $Usage = <<USAGE ;
-Usage: $prog [ -v ] [ -q ] [ -t timeout ] [ -get opt ] [ -c conf ]
+Usage: $prog [-v] [-q] [-t timeout] [-c conf] [-get all|update|url <url>]
 option v   : be verbose
 option q   : be quiet
 option t   : set timeout ; default $TIMEOUT
-option get : 'all'    : probe all sites
-           : 'update' : probe a selection of the sites (see doc)
+option get : get all       : probe all sites
+           : get update    : probe a selection of the sites (see doc)
+           : get url <url> : probe some <url> (in the mirror-list).
 option c   : configuration file ; default search :
              ( $DEF_CNF )
 -------------------------------------------------------------------
@@ -45,23 +46,30 @@ use Getopt::Long ;
 Getopt::Long::config ( 'no_ignore_case' ) ;
 my %opt = () ;
 Usage '' unless GetOptions ( \%opt, qw(v q t=i get=s c=s version) ) ;
-Usage "Arg count\n" unless @ARGV == 0 ;
+Usage "Arg count\n" if @ARGV > 1 ;
+Usage "Arg count\n" if $opt{get} and $opt{get} eq 'url' and ! @ARGV ;
 
 if ( $opt{version} ) { printf "%s\n", Base::version () ; exit ; }
 
 $opt{v} ||= $opt{d} ;
 
+my $URL = shift ;
+
+my $M = Mirmon -> new ( $opt{c} ) ;
+$M -> conf -> timeout ( $opt{t} ) if $opt{t} ;
+
 my $get = $opt{get} ;
-if ( $get and ! Base::is_get_opt ( $get ) )
-  { Error "unknown 'get option' '$get'" ; }
+if ( $get )
+  { Error "url $URL not in list"
+      if $get eq 'url' and ! $M -> state -> { $URL } ;
+    Error "unknown 'get option' '$get'" unless Base::is_get_opt ( $get ) ;
+  }
 
 Mirmon::verbose ( $opt{v} ) ;
 Mirmon::debug   ( $opt{d} ) ;
 Mirmon::quiet   ( $opt{q} ) ;
 
-my $M = Mirmon -> new ( $opt{c} ) ;
-$M -> conf -> timeout ( $opt{t} ) if $opt{t} ;
-if ( $get ) { $M -> get_dates ( $get ) ; $M -> put_state ; }
+if ( $get ) { $M -> get_dates ( $get, $URL ) ; $M -> put_state ; }
 $M -> gen_page ( $get, $VERSION ) ;
 
 __END__
@@ -74,7 +82,7 @@ mirmon - monitor the state of mirrors
 
 =head1 SYNOPSIS
 
-  mirmon [ -v ] [ -q ] [ -t timeout ] [ -get opt ] [ -c conf ]
+  mirmon [-v] [-q] [-t timeout] [-c conf] [-get all|update|url url]
 
 =head1 OPTIONS
 
@@ -93,11 +101,11 @@ Be quiet.
 
 Set the timeout ; the default is I<300>.
 
-=item B<-get> I<all> | I<update>
+=item B<-get> all | update | url <url>
 
-With I<all>, probe all sites ;
-with I<update>, probe a selection of the sites ;
-see option C<max_poll> below.
+With B<all>, probe all sites.
+With B<update>, probe a selection of the sites ; see option C<max_poll> below.
+With B<url>, probe only the given I<url>, which must appear in the mirror-list.
 
 =item B<-c> I<name>
 
@@ -650,12 +658,12 @@ mirmon.pm(3)
 =begin html
 
   <p>
-  &copy; 2003-2013
+  &copy; 2003-2014
   <a href="http://www.staff.science.uu.nl/~penni101/">Henk P. Penning</a>,
   <a href="http://www.uu.nl/faculty/science/EN/">Faculty of Science</a>,
   <a href="http://www.uu.nl/">Utrecht University</a>
   <br />
-  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp ;
+  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp ;
   <a href="http://validator.w3.org/check?uri=referer">verify html</a>
   </p>
 
@@ -663,19 +671,19 @@ mirmon.pm(3)
 
 =begin man
 
-  (c) 2003-2013 Henk P. Penning
+  (c) 2003-2014 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp
+  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
 
 =end man
 
 =begin text
 
-  (c) 2003-2013 Henk P. Penning
+  (c) 2003-2014 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp
+  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
 
 =end text
 

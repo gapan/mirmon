@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "Mirmon 3"
-.TH Mirmon 3 "2013-08-13" "perl v5.8.5" "User Contributed Perl Documentation"
+.TH Mirmon 3 "2014-08-15" "perl v5.8.5" "User Contributed Perl Documentation"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -198,10 +198,11 @@ Returns a hashref \f(CW\*(C`{ country_code => country_name, ... }\*(C'\fR.
 .IP "\fBconfig_list\fR" 4
 .IX Item "config_list"
 Returns the list of default locations for config files.
-.ie n .IP "\fBget_dates ( \fB$get\fB )\fR" 4
-.el .IP "\fBget_dates ( \f(CB$get\fB )\fR" 4
-.IX Item "get_dates ( $get )"
-Probes all mirrors if \f(CW$get\fR is \f(CW\*(C`all\*(C'\fR ; or a subset if \f(CW$get\fR is \f(CW\*(C`update\*(C'\fR.
+.ie n .IP "\fBget_dates ( \fB$get\fB [, \f(BI$URL\fB] )\fR" 4
+.el .IP "\fBget_dates ( \f(CB$get\fB [, \f(CB$URL\fB] )\fR" 4
+.IX Item "get_dates ( $get [, $URL] )"
+Probes all mirrors if \f(CW$get\fR is \f(CW\*(C`all\*(C'\fR ; or a subset if \f(CW$get\fR is \f(CW\*(C`update\*(C'\fR ;
+or only \fI\f(CI$URL\fI\fR if \f(CW$get\fR is \f(CW\*(C`url\*(C'\fR.
 .SH "Mirmon::Conf object methods"
 .IX Header "Mirmon::Conf object methods"
 A Mirmon::Conf object represents a mirmon conguration.
@@ -312,7 +313,7 @@ and updates the state of the mirror.
 mirmon(1)
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-  (c) 2003-2013 Henk P. Penning
+  (c) 2003-2014 Henk P. Penning
   Faculty of Science, Utrecht University
   http://www.staff.science.uu.nl/~penni101/ -- penning@uu.nl
-  mirmon-2.9 - Tue Aug 13 06:48:23 2013 ; henkp
+  mirmon-2.10 - Fri Aug 15 12:26:55 2014 ; henkp
